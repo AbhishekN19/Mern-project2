@@ -8,11 +8,14 @@ const authRoutes = require('./Routes/Auth');
 
 require('dotenv').config();
 require('./db');
-const User = require('./Models/UserSchema')
+const User = require('./Models/UserSchema');
+const cookieParser = require('cookie-parser');
+
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/auth',authRoutes);
+app.use(cookieParser());
 
 
 app.get('/', (req,res) => {
