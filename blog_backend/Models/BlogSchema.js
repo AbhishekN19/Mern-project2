@@ -15,7 +15,7 @@ const paragraphSchema = new mongoose.Schema({
         type: String,
         required:true,
     },
-});
+})
 
 const blogSchema = new mongoose.Schema({
     title: { 
@@ -30,9 +30,9 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required:true,
     },
-    paragraph: {
+    paragraphs: {
         type: [paragraphSchema],
-        default: [],
+        default: []
     },
 
     owner: {
