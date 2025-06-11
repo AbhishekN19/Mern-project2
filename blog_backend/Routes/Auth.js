@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -21,6 +22,14 @@ router.get('/test',async (req, res) => {
         message: "Auth API is working"
     })
 })
+
+function createResponse(ok, message, data) {
+    return {
+        ok,
+        message,
+        data,
+    };
+}
 
 router.post ('/sendotp', async (req,res) => {
     const { email } = req.body;
@@ -36,19 +45,16 @@ router.post ('/sendotp', async (req,res) => {
         transporter.sendMail(mailOptions, async (err, info) => {
             if(err) {
                 console.log(err);
-                res.status(500).json({ message: err.message});
+                res.status(500).json(createResponse(false, err.message));
             }
             else {
-
-
-                res.json({
-                    message:'OTP sent successfully', otp: otp
-                });
+                res.json(createResponse(true,'OTP sent successfully', { otp }));
             }
         })
     }
     catch(err) {
-        next(err);
+        console.log(err);
+        res.status(500).json(createResponse(false, err.message));
     }
 })
 router.post('/register',async (req, res, next) => {
@@ -67,7 +73,7 @@ router.post('/register',async (req, res, next) => {
         });
 
         await newUser.save();
-        res.status(201).json({ message: "User Successfully REGISTERED!"});
+        res.status(201).json(createResponse( true, "User Successfully REGISTERED!"));
     }
     catch(err) {
         next(err);
@@ -82,13 +88,13 @@ router.post('/login',async (req, res, next) => {
         const user = await User.findOne({ email});
 
         if (!user) {
-            return res.status(400).json({ message:" User not found"});
+            return res.status(400).json(createResponse(false, 'Invalid credentials'));
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if(!isMatch) {
-            return res.status(400).json ({ message: "Invalid Credentials"});
+            return res.status(400).json (createResponse(false, 'Invalid credentials'));
         }
 
         const authToken = jwt.sign({ userId: user._id}, process.env.JWT_SECRET_KEY, {expiresIn: '10m'});
@@ -97,7 +103,10 @@ router.post('/login',async (req, res, next) => {
         res.cookie('authToken', authToken, { httpOnly: true});
         res.cookie('refreshToken', refreshToken, {httpOnly: true});
 
-        res.status(200).json({ message : "Login Successful"  })
+        res.status(200).json(createResponse(true, 'Login successful', {
+            authToken,
+            refreshToken
+        }))
     }
     catch(err){
         next(err);
