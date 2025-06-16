@@ -21,7 +21,11 @@
 
 .authin .left {
     width: 40%; 
-    background-color: rgb(208,208,208);
+    background-color: rgba(116, 166, 223, 0.432);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .authin .right {

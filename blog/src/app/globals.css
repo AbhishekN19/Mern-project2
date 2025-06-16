@@ -2,6 +2,7 @@
   --col2 : #ffde592b;
   --col1 : #ffde59;
   --col3 : #333;
+  --errorcol : red;
 }
 
 * {
@@ -16,9 +17,15 @@
   color: var(--col1);
 }
 
+.formerror {
+  color: var(--errorcol);
+  margin-left: 45%;
+
+}
 .forminput_cont {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   margin: 10px 0px;
   gap:10px;
   width: 100%;

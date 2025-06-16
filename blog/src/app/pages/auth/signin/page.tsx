@@ -1,8 +1,13 @@
 "use client"
+import React, {useState} from "react";
 import Image from "next/image";
-import styles from "./page.module.css";
-import Navbar from "@/app/components/Navbar/Navbar"
+import styles from './page.module.css';
+import '../auth.css';
+import Navbar from "@/app/components/Navbar/Navbar";
 import Link from "next/link";
+import {toast} from 'react-toastify';
+import logo from '@/assets/BLOG.png';
+
 
 export default function signin() {
   return (
@@ -29,7 +34,7 @@ export default function signin() {
 
                     <button type="submit" className="main_button">Login</button>
 
-                    <p className="authlink">Don't have an account?   <Link href={"/auth/signup"}>Register</Link></p>
+                    <p className="authlink">Don't have an account?   <Link href={"signup"}>Register</Link></p>
                 </form>
             </div>
         </div>
