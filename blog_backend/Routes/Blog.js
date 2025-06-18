@@ -31,8 +31,8 @@ const checkBlogOwnership = async (req, res, next) => {
 router.post('/', authTokenHandler, async (req, res) => {
     try {
         
-        const {title, description, image, paragraphs, category } = req.body;
-        const blog = new Blog({ title, description, image, paragraphs, owner: req.userId, category });
+        const {title, description, imageUrl, paragraphs, category } = req.body;
+        const blog = new Blog({ title, description, imageUrl, paragraphs, owner: req.userId, category });
         await blog.save();
         
         const user = await User.findById(req.userId);
@@ -64,10 +64,10 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', authTokenHandler, checkBlogOwnership, async (req, res) => {
     try {
-        const { title, description, image, paragraphs, category} = req.body;
+        const { title, description, imageUrl, paragraphs, category} = req.body;
         const updatedBlog = await Blog.findByIdAndUpdate (
             req.params.id,
-            { title, description, image, paragraphs, category },
+            { title, description, imageUrl, paragraphs, category },
             { new: true }
         );
 

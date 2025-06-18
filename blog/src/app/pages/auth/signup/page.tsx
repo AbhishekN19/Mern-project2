@@ -8,6 +8,7 @@ import Link from "next/link";
 import {toast} from 'react-toastify';
 import logo from '@/assets/BLOG.png';
 import { validateHeaderName } from "http";
+import { error } from "console";
 
 interface FormData {
     name: string;
@@ -37,8 +38,8 @@ export default function Signup() {
 
     const handleSubmit = async ( e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(process.env.NEXT_PUBLIC_BACKEND_API)
-        console.log (formData);
+        // console.log(process.env.NEXT_PUBLIC_BACKEND_API)
+        // console.log (formData);
 
         setErrors({})
 
@@ -58,6 +59,45 @@ export default function Signup() {
             setErrors(validationErrors);
             return;
         }
+
+        fetch (`${process.env.NEXT_PUBLIC_BACKEND_API}/auth/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then ((res) => {
+            return res.json();
+        })
+        .then ((response) => {
+            if (response.ok) {
+                toast(response.message, {
+                    type: 'success',
+                    position: 'top-right',
+                    autoClose: 2000
+                })
+                setFormData({
+                    name: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: '',
+                })
+            } else {
+                toast(response.message, {
+                    type:'error',
+                    position: 'top-right',
+                    autoClose: 2000
+                });
+            }
+        })
+        .catch((error)=> {
+            toast( error.message, {
+                type: 'error',
+                position: 'top-right',
+                autoClose: 2000
+            });
+        })
     }
 
   return (
@@ -122,7 +162,7 @@ export default function Signup() {
                         {errors.confirmPassword && <span className ="formerror">{errors.confirmPassword}</span>}
                     </div>
                     <button type="submit" className="main_button">Register</button>
-                    <p className="authlink">Already have an account?   <Link href={"/signin"}>LOGIN</Link></p>
+                    <p className="authlink">Already have an account?   <Link href={"/pages/auth/signin"}>LOGIN</Link></p>
                 </form>
             </div>
         </div>

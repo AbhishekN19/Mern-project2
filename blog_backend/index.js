@@ -14,9 +14,10 @@ const User = require('./Models/UserSchema');
 const cookieParser = require('cookie-parser');
 
 app.use(bodyParser.json());
-const allowedOrigins = ['https://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000'];
 
 app.use(
+    
     cors({
         origin: function (origin, callback) {
             if(!origin || allowedOrigins.includes(origin)) {
@@ -27,13 +28,12 @@ app.use(
         },
         credentials: true,
     })
-)
+);
 
 
 app.use(cookieParser());
 
 app.use(bodyParser.json());
-app.use(cors());
 app.use('/auth',authRoutes);
 app.use('/blog',blogRoutes);
 app.use('/image',imageuploadRoutes);

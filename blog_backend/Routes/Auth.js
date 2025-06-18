@@ -115,5 +115,11 @@ router.post('/login',async (req, res, next) => {
 
 router.use(errorHandler);
 
+router.get('/checklogin', authTokenHandler, async (req,res) => {
+    res.json({
+        ok:true,
+        message: 'User authenticated successfully'
+    })
+})
 
 module.exports = router;
